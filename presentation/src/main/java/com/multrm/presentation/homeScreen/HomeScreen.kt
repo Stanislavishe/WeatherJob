@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multrm.presentation.LoadingState
+import com.multrm.presentation.R
 import com.multrm.presentation.homeScreen.components.CityCard
 
 @Composable
@@ -52,7 +54,7 @@ fun HomeScreen(
     Column(modifier.padding(horizontal = 16.dp)) {
         Spacer(Modifier.height(12.dp))
         Text(
-           text = "Выберите город",
+           text = stringResource(R.string.HomeScreen_ChangeCity),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -111,7 +113,7 @@ private fun CitiesList(uiState: HomeUiState.Success, onNavigate: (String) -> Uni
         if (uiState.data.isEmpty()) {
             item {
                 Text(
-                    text = "Такого города в списке нет(",
+                    text = stringResource(R.string.HomeScreen_NotHaveCity),
                     fontSize = 20.sp,
                     modifier = Modifier.padding(top = 20.dp),
                     textAlign = TextAlign.Center

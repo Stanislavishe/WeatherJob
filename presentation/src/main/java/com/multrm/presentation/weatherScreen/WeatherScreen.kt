@@ -75,7 +75,7 @@ fun WeatherScreen(
         when (val state = uiState) {
             WeatherUiState.Error.NotFoundCity -> {
                 ErrorBox(
-                    errorText = "Не удалось найти погоду здесь(",
+                    errorText = stringResource(R.string.ErrorText_NotFound),
                     Modifier
                         .weight(1f)
                         .fillMaxWidth()
@@ -84,7 +84,7 @@ fun WeatherScreen(
 
             WeatherUiState.Error.Other -> {
                 ErrorBox(
-                    errorText = "Что-то пошло не так", Modifier
+                    errorText = stringResource(R.string.ErrorText_SometingWentWrong), Modifier
                         .weight(1f)
                         .fillMaxWidth()
                 ) { vm.getWeather(cityName) }
@@ -92,7 +92,7 @@ fun WeatherScreen(
 
             WeatherUiState.Error.UnknownHost -> {
                 ErrorBox(
-                    errorText = "Похоже у вас проблемы с интернетом",
+                    errorText = stringResource(R.string.ErrorText_NoInternet),
                     Modifier
                         .weight(1f)
                         .fillMaxWidth()
@@ -101,7 +101,7 @@ fun WeatherScreen(
 
             WeatherUiState.Error.Timeout -> {
                 ErrorBox(
-                    errorText = "Похоже у вас медленный интернет или не включен VPN)",
+                    errorText = stringResource(R.string.ErrorText_NoVPN),
                     Modifier
                         .weight(1f)
                         .fillMaxWidth()
@@ -122,7 +122,7 @@ fun WeatherScreen(
                         isImHere = !isImHere
                     }, modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "Я тут",
+                            text = stringResource(R.string.WeatherScreen_ImHere),
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center
                         )
@@ -133,7 +133,7 @@ fun WeatherScreen(
                         isImHere = !isImHere
                     }, modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "Я тут",
+                            text = stringResource(R.string.WeatherScreen_ImHere),
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center
                         )
@@ -177,7 +177,7 @@ private fun WeatherContent(state: WeatherUiState.Success) {
         ItemWeatherInfo(state.current.infoList.last())
         Spacer(Modifier.height(12.dp))
         Text(
-            "Прогноз на несколько дней",
+            stringResource(R.string.WeatherScreen_FerecastFewDays),
             fontSize = 32.sp,
             textAlign = TextAlign.Center
         )

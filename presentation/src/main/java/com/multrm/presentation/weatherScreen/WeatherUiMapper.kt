@@ -1,5 +1,6 @@
 package com.multrm.presentation.weatherScreen
 
+import android.content.Context
 import android.util.Log
 import com.multrm.domain.Operation
 import com.multrm.entity.CityWeather
@@ -7,36 +8,30 @@ import com.multrm.entity.db.CityWeatherFrommDb
 import com.multrm.entity.weatherScreenEntity.CurrentInfo
 import com.multrm.entity.weatherScreenEntity.ItemForecast
 import com.multrm.entity.weatherScreenEntity.ItemInfo
+import com.multrm.presentation.R
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class WeatherUiMapper @Inject constructor() : Operation.Mapper<WeatherUiState> {
+class WeatherUiMapper @Inject constructor(
+    private val context: Context,
+) : Operation.Mapper<WeatherUiState> {
     override fun <T> mapSuccess(data: T): WeatherUiState {
         return if (data is CityWeather) {
             val weatherState = data.current.condition.text
             val weatherIcon = "https:" + data.current.condition.icon
-            val currentList = buildList {
-                add(ItemInfo("Температура", data.current.tempC.toString(), "C"))
-                add(ItemInfo("Ощущается как", data.current.feelsLikeC.toString(), "C"))
-                add(ItemInfo("Ветер", data.current.winKph.toString(), "Км/ч"))
-                add(ItemInfo("Порывы ветра", data.current.gustKph.toString(), "Км/ч"))
-                add(ItemInfo("Давление", data.current.pressureMb.toString(), "Мбар"))
-                add(ItemInfo("Влажность", data.current.tempC.toString(), "%"))
-                add(ItemInfo("Точка росы", data.current.dewPointC.toString(), "C"))
-                add(ItemInfo("Уф индекс", data.current.uv.toString(), ""))
-                add(ItemInfo("Направление", convertWindDir(data.current.windDir), ""))
-            }
-            val currentInfo = CurrentInfo(
-                weatherState, weatherIcon, currentList
-            )
+            val currentList = buildCurrentList(data.current)
 
+            val currentInfo = CurrentInfo(weatherState, weatherIcon, currentList)
             val forecastList = buildList {
                 data.forecast.forecastday.forEach { forecast ->
                     val convertedDate = forecast.date.takeLast(5).replace("-", ".")
                     val icon = "https:" + forecast.day.condition.icon
-                    val temp = forecast.day.minTemp.toInt()
-                        .toString() + ".." + forecast.day.maxTemp.toInt().toString() + " C"
+                    val temp = context.getString(
+                        R.string.forecastTemp,
+                        forecast.day.minTemp.toInt().toString(),
+                        forecast.day.maxTemp.toInt().toString()
+                    )
                     add(ItemForecast(convertedDate, icon, temp))
                 }
             }
@@ -84,5 +79,71 @@ class WeatherUiMapper @Inject constructor() : Operation.Mapper<WeatherUiState> {
                 "Неизвестное значение"
             }
         }
+    }
+
+    private fun buildCurrentList(current: CityWeather.Current) = buildList {
+        add(
+            ItemInfo(
+                title = context.getString(R.string.temperature),
+                value = current.tempC.toInt().toString(),
+                measurement = context.getString(R.string.c)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.filslike),
+                value = current.feelsLikeC.toInt().toString(),
+                measurement = context.getString(R.string.c)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.wind),
+                value = current.winKph.toInt().toString(),
+                measurement = context.getString(R.string.kph)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.gustsWind),
+                value = current.gustKph.toInt().toString(),
+                measurement = context.getString(R.string.kph)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.pressure),
+                value = current.pressureMb.toInt().toString(),
+                measurement = context.getString(R.string.mbar)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.humidity),
+                value = current.humidity.toString(),
+                measurement = "%"
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.dewPoint),
+                value = current.dewPointC.toInt().toString(),
+                measurement = context.getString(R.string.c)
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.uvIndex),
+                value = current.uv.toInt().toString(),
+                measurement = ""
+            )
+        )
+        add(
+            ItemInfo(
+                title = context.getString(R.string.direction),
+                value = convertWindDir(current.windDir),
+                measurement = ""
+            )
+        )
     }
 }

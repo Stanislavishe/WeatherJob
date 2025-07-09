@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="WeatherScreen_Title">Погода в городе:</string>
+    <string name="temperature">Температура</string>
+    <string name="filslike">Ощущается как</string>
+    <string name="wind">Ветер</string>
+    <string name="gustsWind">Порывы ветра</string>
+    <string name="pressure">Давление</string>
+    <string name="humidity">Влажность</string>
+    <string name="dewPoint">Точка росы</string>
+    <string name="uvIndex">Уф индекс</string>
+    <string name="direction">Направление</string>
+    <string name="c">C</string>
+    <string name="kph">Км/ч</string>
+    <string name="mbar">Мбар</string>
+    <string name="forecastTemp">%s..%s C</string>
+    <string name="HomeScreen_ChangeCity">Выберите город</string>
+    <string name="HomeScreen_NotHaveCity">Такого города в списке нет(</string>
+    <string name="ErrorText_NotFound">Не удалось найти погоду здесь(</string>
+    <string name="ErrorText_SometingWentWrong">Что-то пошло не так</string>
+    <string name="ErrorText_NoInternet">Похоже у вас проблемы с интернетом</string>
+    <string name="ErrorText_NoVPN">Похоже у вас медленный интернет или не включен VPN)</string>
+    <string name="WeatherScreen_ImHere">Я тут</string>
+    <string name="WeatherScreen_FerecastFewDays">Прогноз на несколько дней</string>
 </resources>
