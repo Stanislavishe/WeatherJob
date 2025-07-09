@@ -18,19 +18,19 @@ import javax.inject.Inject
 class WeatherVM @Inject constructor(
     private val repository: WeatherRepository,
     private val dbRepository: WeatherDatabaseRepository,
-    private val mapper: Operation.Mapper<WeatherUiState>
-//    private val dispatchersList: DispatchersList = DispatchersList.Base()
+    private val mapper: Operation.Mapper<WeatherUiState>,
+    private val dispatchers: DispatchersList
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Initial)
     val uiState = _uiState.asStateFlow()
 
-    fun getWeather(cityName: String) = viewModelScope.launch {
+    fun getWeather(cityName: String) = viewModelScope.launch(dispatchers.ui()) {
         _uiState.value = WeatherUiState.Loading
         val state = repository.getWeather(cityName, 4).map(mapper)
         when (state) {
             is WeatherUiState.Success -> {
                 try {
-                    withContext(Dispatchers.IO) {
+                    withContext(dispatchers.io()) {
                         dbRepository.putCacheWeather(cityName, state.current, state.forecast)
                     }
                 } catch (e: Exception) {
@@ -40,7 +40,7 @@ class WeatherVM @Inject constructor(
                 }
             }
             is WeatherUiState.Error.UnknownHost -> {
-                withContext(Dispatchers.IO) {
+                withContext(dispatchers.io()) {
                     val newState = dbRepository.getCacheWeather(cityName).map(mapper)
                     _uiState.value = newState
                 }

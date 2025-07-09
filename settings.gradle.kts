@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Weather"
+rootProject.name = "WeatherJob"
 include(":app")
 include(":data")
 include(":domain")
