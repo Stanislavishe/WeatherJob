@@ -72,7 +72,6 @@ class WeatherUiMapper @Inject constructor() : Operation.Mapper<WeatherUiState> {
             "WNW" -> R.string.dir_wnw
             "NNW" -> R.string.dir_nnw
             else -> {
-                Log.d("WeatherUiMapper", "convertWindDir: Unknown: $windDir")
                 R.string.unknown_dir
             }
         }
