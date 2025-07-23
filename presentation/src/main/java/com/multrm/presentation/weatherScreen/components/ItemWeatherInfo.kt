@@ -17,14 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.multrm.entity.weatherScreenEntity.ItemInfo
+import com.multrm.presentation.R
 
 @Composable
-fun ItemWeatherInfo(info: ItemInfo) {
+fun ItemWeatherInfo(info: ItemInfo, isLast: Boolean) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +40,7 @@ fun ItemWeatherInfo(info: ItemInfo) {
             .wrapContentHeight()
     ) {
         Text(
-            text = info.title,
+            text = stringResource(info.titleResId),
             fontSize = 20.sp,
             color = Color.DarkGray
         )
@@ -47,14 +49,15 @@ fun ItemWeatherInfo(info: ItemInfo) {
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = info.value,
+                text = if (isLast) stringResource(info.value) else info.value.toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
                 softWrap = true,
             )
             Spacer(Modifier.width(4.dp))
+            val measurementResId = info.measurementResId
             Text(
-                text = info.measurement,
+                text = if (measurementResId != 0) stringResource(measurementResId) else "" ,
                 fontSize = 18.sp,
                 color = Color.Gray
             )
@@ -65,5 +68,5 @@ fun ItemWeatherInfo(info: ItemInfo) {
 @Preview(showBackground = true)
 @Composable
 fun ItemWeatherInfoPreview() {
-    ItemWeatherInfo(ItemInfo("Температура", "35", "С"))
+    ItemWeatherInfo(ItemInfo(R.string.temperature, 35, R.string.c), isLast = false)
 }

@@ -1,7 +1,7 @@
 package com.multrm.entity.weatherScreenEntity
 
 data class ItemInfo(
-    val title: String,
-    val value: String,
-    val measurement: String
+    val titleResId: Int,
+    val value: Int,
+    val measurementResId: Int
 )

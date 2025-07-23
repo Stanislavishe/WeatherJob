@@ -169,12 +169,12 @@ private fun WeatherContent(state: WeatherUiState.Success) {
         ) {
             val gridList = state.current.infoList.toMutableList()
             gridList.removeAt(gridList.lastIndex)
-            items(gridList, key = { it.title }) { item ->
-                ItemWeatherInfo(item)
+            items(gridList, key = { it.titleResId }) { item ->
+                ItemWeatherInfo(item, false)
             }
         }
         Spacer(Modifier.height(6.dp))
-        ItemWeatherInfo(state.current.infoList.last())
+        ItemWeatherInfo(state.current.infoList.last(), true)
         Spacer(Modifier.height(12.dp))
         Text(
             stringResource(R.string.WeatherScreen_FerecastFewDays),

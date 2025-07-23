@@ -1,6 +1,5 @@
 package com.multrm.presentation.weatherScreen
 
-import android.content.Context
 import android.util.Log
 import com.multrm.domain.Operation
 import com.multrm.entity.CityWeather
@@ -13,9 +12,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class WeatherUiMapper @Inject constructor(
-    private val context: Context,
-) : Operation.Mapper<WeatherUiState> {
+class WeatherUiMapper @Inject constructor() : Operation.Mapper<WeatherUiState> {
     override fun <T> mapSuccess(data: T): WeatherUiState {
         return if (data is CityWeather) {
             val weatherState = data.current.condition.text
@@ -27,10 +24,10 @@ class WeatherUiMapper @Inject constructor(
                 data.forecast.forecastday.forEach { forecast ->
                     val convertedDate = forecast.date.takeLast(5).replace("-", ".")
                     val icon = "https:" + forecast.day.condition.icon
-                    val temp = context.getString(
+                    val temp = ItemForecast.Temperature(
                         R.string.forecastTemp,
-                        forecast.day.minTemp.toInt().toString(),
-                        forecast.day.maxTemp.toInt().toString()
+                        forecast.day.minTemp.toInt(),
+                        forecast.day.maxTemp.toInt()
                     )
                     add(ItemForecast(convertedDate, icon, temp))
                 }
@@ -56,27 +53,27 @@ class WeatherUiMapper @Inject constructor(
         }
     }
 
-    private fun convertWindDir(windDir: String): String {
+    private fun convertWindDir(windDir: String): Int {
         return when (windDir) {
-            "S" -> "Юг"
-            "W" -> "Запад"
-            "N" -> "Север"
-            "E" -> "Восток"
-            "SW" -> "Юго-запад"
-            "SE" -> "Юго-восток"
-            "NW" -> "Северо-запад"
-            "NE" -> "Северо-восток"
-            "SSW" -> "Юго-юго-запад"
-            "SSN" -> "Юго-юго-восток"
-            "WSW" -> "Запад-юго-запад"
-            "NEE" -> "Северо-северо-восток"
-            "ENE" -> "Востоко-северо-восток"
-            "ESE" -> "Востоко-юго-восток"
-            "WNW" -> "Западо-северо-запад"
-            "NNW" -> "Северо-северо-запад"
+            "S" -> R.string.dir_s
+            "W" -> R.string.dir_w
+            "N" -> R.string.dir_n
+            "E" -> R.string.dir_e
+            "SW" -> R.string.dir_sw
+            "SE" -> R.string.dir_se
+            "NW" -> R.string.dir_nw
+            "NE" -> R.string.dir_ne
+            "SSW" -> R.string.dir_ssw
+            "SSN" -> R.string.dir_ssn
+            "WSW" -> R.string.dir_wsw
+            "NEE" -> R.string.dir_nee
+            "ENE" -> R.string.dir_ene
+            "ESE" -> R.string.dir_ese
+            "WNW" -> R.string.dir_wnw
+            "NNW" -> R.string.dir_nnw
             else -> {
                 Log.d("WeatherUiMapper", "convertWindDir: Unknown: $windDir")
-                "Неизвестное значение"
+                R.string.unknown_dir
             }
         }
     }
@@ -84,65 +81,65 @@ class WeatherUiMapper @Inject constructor(
     private fun buildCurrentList(current: CityWeather.Current) = buildList {
         add(
             ItemInfo(
-                title = context.getString(R.string.temperature),
-                value = current.tempC.toInt().toString(),
-                measurement = context.getString(R.string.c)
+                titleResId = R.string.temperature,
+                value = current.tempC.toInt(),
+                measurementResId = R.string.c
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.filslike),
-                value = current.feelsLikeC.toInt().toString(),
-                measurement = context.getString(R.string.c)
+                titleResId = R.string.filslike,
+                value = current.feelsLikeC.toInt(),
+                measurementResId = R.string.c
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.wind),
-                value = current.winKph.toInt().toString(),
-                measurement = context.getString(R.string.kph)
+                titleResId = R.string.wind,
+                value = current.winKph.toInt(),
+                measurementResId = R.string.kph
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.gustsWind),
-                value = current.gustKph.toInt().toString(),
-                measurement = context.getString(R.string.kph)
+                titleResId = R.string.gustsWind,
+                value = current.gustKph.toInt(),
+                measurementResId = R.string.kph
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.pressure),
-                value = current.pressureMb.toInt().toString(),
-                measurement = context.getString(R.string.mbar)
+                titleResId = R.string.pressure,
+                value = current.pressureMb.toInt(),
+                measurementResId = R.string.mbar
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.humidity),
-                value = current.humidity.toString(),
-                measurement = "%"
+                titleResId = R.string.humidity,
+                value = current.humidity,
+                measurementResId = R.string.procent
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.dewPoint),
-                value = current.dewPointC.toInt().toString(),
-                measurement = context.getString(R.string.c)
+                titleResId = R.string.dewPoint,
+                value = current.dewPointC.toInt(),
+                measurementResId = R.string.c
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.uvIndex),
-                value = current.uv.toInt().toString(),
-                measurement = ""
+                titleResId = R.string.uvIndex,
+                value = current.uv.toInt(),
+                measurementResId = 0
             )
         )
         add(
             ItemInfo(
-                title = context.getString(R.string.direction),
+                titleResId = R.string.direction,
                 value = convertWindDir(current.windDir),
-                measurement = ""
+                measurementResId = 0
             )
         )
     }
